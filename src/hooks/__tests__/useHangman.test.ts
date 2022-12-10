@@ -4,8 +4,10 @@ import useHangman from "../useHangman";
 
 jest.mock("../../api/getWord", () => jest.fn());
 
+const TEST_WORD = "test";
+
 beforeEach(() => {
-  (getWord as jest.Mock).mockReturnValue("test");
+  (getWord as jest.Mock).mockReturnValue(TEST_WORD);
 });
 
 it("should call getWord and initialize a word for guessing", () => {
@@ -15,12 +17,36 @@ it("should call getWord and initialize a word for guessing", () => {
 
   expect(getWord).toHaveBeenCalledTimes(1);
 
-  expect(result.current.guessedWord).toEqual([
+  expect(result.current.word).toEqual(TEST_WORD);
+
+  expect(result.current.lettersInWord).toEqual([
     { character: "t", guessedCorrectly: false },
     { character: "e", guessedCorrectly: false },
     { character: "s", guessedCorrectly: false },
     { character: "t", guessedCorrectly: false },
   ]);
+});
+
+describe("when any letter is guessed", () => {
+  it("should append the guessed letter to letters guessed array", async () => {
+    const { result } = renderHook(useHangman);
+    expect(result.current.lettersGuessed).toEqual([]);
+
+    const FIRST_GUESS = "a";
+    const SECOND_GUESS = "b";
+
+    await act(async () => {
+      result.current.guessLetter(FIRST_GUESS);
+    });
+
+    expect(result.current.lettersGuessed).toEqual([FIRST_GUESS]);
+
+    await act(async () => {
+      result.current.guessLetter(SECOND_GUESS);
+    });
+
+    expect(result.current.lettersGuessed).toEqual([FIRST_GUESS, SECOND_GUESS]);
+  });
 });
 
 describe("when a correct letter is guessed", () => {
@@ -31,7 +57,7 @@ describe("when a correct letter is guessed", () => {
       result.current.guessLetter("t");
     });
 
-    expect(result.current.guessedWord).toEqual([
+    expect(result.current.lettersInWord).toEqual([
       { character: "t", guessedCorrectly: true },
       { character: "e", guessedCorrectly: false },
       { character: "s", guessedCorrectly: false },

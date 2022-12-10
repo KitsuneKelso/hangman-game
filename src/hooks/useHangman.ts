@@ -5,7 +5,8 @@ import { Letter } from "../types";
 
 const useHangman = () => {
   const [word, setWord] = useState("");
-  const [guessedWord, setGuessedWord] = useState<Letter[]>([]);
+  const [lettersInWord, setLettersInWord] = useState<Letter[]>([]);
+  const [lettersGuessed, setLettersGuessed] = useState<string[]>([]);
   const [numberOfIncorrectGuesses, setNumberOfIncorrectGuesses] = useState(0);
 
   const hasLost = useMemo(
@@ -14,9 +15,9 @@ const useHangman = () => {
   );
   const hasWon = useMemo(
     () =>
-      guessedWord.length > 0 &&
-      guessedWord.every((letter) => letter.guessedCorrectly),
-    [guessedWord]
+      lettersInWord.length > 0 &&
+      lettersInWord.every((letter) => letter.guessedCorrectly),
+    [lettersInWord]
   );
 
   useEffect(() => {
@@ -31,30 +32,33 @@ const useHangman = () => {
         guessedCorrectly: false,
       }));
 
-      setGuessedWord(newGuessedWord);
+      setLettersInWord(newGuessedWord);
     }
   }, [word]);
 
   const guessLetter = useCallback(
     (guessedLetter: string) => {
-      console.log(guessLetter);
+      setLettersGuessed([...lettersGuessed, guessedLetter]);
+
       if (word.includes(guessedLetter)) {
-        const updatedGuessedWord = guessedWord.map((letter) => ({
+        const updatedGuessedWord = lettersInWord.map((letter) => ({
           ...letter,
           guessedCorrectly:
             letter.character === guessedLetter || letter.guessedCorrectly,
         }));
 
-        setGuessedWord(updatedGuessedWord);
+        setLettersInWord(updatedGuessedWord);
       } else {
         setNumberOfIncorrectGuesses((cur) => cur + 1);
       }
     },
-    [guessedWord, word]
+    [lettersGuessed, lettersInWord, word]
   );
 
   return {
-    guessedWord,
+    word,
+    lettersInWord,
+    lettersGuessed,
     numberOfIncorrectGuesses,
     hasLost,
     hasWon,

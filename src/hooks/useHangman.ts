@@ -4,6 +4,7 @@ import { MAX_NUMBER_OF_GUESSES } from "../constants";
 import { Letter } from "../types";
 
 const useHangman = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [word, setWord] = useState("");
   const [lettersInWord, setLettersInWord] = useState<Letter[]>([]);
   const [lettersGuessed, setLettersGuessed] = useState<string[]>([]);
@@ -20,13 +21,18 @@ const useHangman = () => {
     [lettersInWord]
   );
 
-  useEffect(() => {
-    const newWord = getWord();
+  const startNewGame = useCallback(async () => {
+    setIsLoading(true);
+    const newWord = await getWord();
     setWord(newWord);
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
     if (word.length > 0) {
+      setLettersGuessed([]);
+      setNumberOfIncorrectGuesses(0);
+
       const newGuessedWord = word.split("").map((char) => ({
         character: char,
         guessedCorrectly: false,
@@ -56,6 +62,8 @@ const useHangman = () => {
   );
 
   return {
+    startNewGame,
+    isLoading,
     word,
     lettersInWord,
     lettersGuessed,

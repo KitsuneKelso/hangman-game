@@ -11,7 +11,9 @@ const Word: React.FC<Props> = ({ lettersInWord }) => {
         return (
           <span key={index}>
             {" "}
-            {letter.guessedCorrectly ? letter.character : "_"}{" "}
+            {letter.guessedCorrectly
+              ? letter.character.toUpperCase()
+              : "_"}{" "}
           </span>
         );
       })}

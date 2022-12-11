@@ -7,29 +7,39 @@ jest.mock("../../api/getWord", () => jest.fn());
 const TEST_WORD = "test";
 
 beforeEach(() => {
-  (getWord as jest.Mock).mockReturnValue(TEST_WORD);
+  (getWord as jest.Mock).mockResolvedValue(TEST_WORD);
 });
 
-it("should call getWord and initialize a word for guessing", () => {
-  expect(getWord).not.toHaveBeenCalled();
+describe("when a new game is started", () => {
+  it("should call getWord and initialize a word for guessing", async () => {
+    expect(getWord).not.toHaveBeenCalled();
 
-  const { result } = renderHook(useHangman);
+    const { result } = renderHook(useHangman);
 
-  expect(getWord).toHaveBeenCalledTimes(1);
+    await act(async () => {
+      result.current.startNewGame();
+    });
 
-  expect(result.current.word).toEqual(TEST_WORD);
+    expect(getWord).toHaveBeenCalledTimes(1);
 
-  expect(result.current.lettersInWord).toEqual([
-    { character: "t", guessedCorrectly: false },
-    { character: "e", guessedCorrectly: false },
-    { character: "s", guessedCorrectly: false },
-    { character: "t", guessedCorrectly: false },
-  ]);
+    expect(result.current.word).toEqual(TEST_WORD);
+
+    expect(result.current.lettersInWord).toEqual([
+      { character: "t", guessedCorrectly: false },
+      { character: "e", guessedCorrectly: false },
+      { character: "s", guessedCorrectly: false },
+      { character: "t", guessedCorrectly: false },
+    ]);
+  });
 });
 
 describe("when any letter is guessed", () => {
   it("should append the guessed letter to letters guessed array", async () => {
     const { result } = renderHook(useHangman);
+    await act(async () => {
+      result.current.startNewGame();
+    });
+
     expect(result.current.lettersGuessed).toEqual([]);
 
     const FIRST_GUESS = "a";
@@ -52,6 +62,9 @@ describe("when any letter is guessed", () => {
 describe("when a correct letter is guessed", () => {
   it("should update the guessed word object", async () => {
     const { result } = renderHook(useHangman);
+    await act(async () => {
+      result.current.startNewGame();
+    });
 
     await act(async () => {
       result.current.guessLetter("t");
@@ -69,6 +82,10 @@ describe("when a correct letter is guessed", () => {
 describe("when all letters in a word have been correctly guessed", () => {
   it("should set the hasWon flag to true", async () => {
     const { result } = renderHook(useHangman);
+    await act(async () => {
+      result.current.startNewGame();
+    });
+
     expect(result.current.hasWon).toEqual(false);
 
     await act(async () => {
@@ -91,6 +108,9 @@ describe("when all letters in a word have been correctly guessed", () => {
 describe("when an incorrect letter is guessed", () => {
   it("should increment the number of incorrect guesses", async () => {
     const { result } = renderHook(useHangman);
+    await act(async () => {
+      result.current.startNewGame();
+    });
 
     expect(result.current.numberOfIncorrectGuesses).toEqual(0);
 
@@ -105,6 +125,10 @@ describe("when an incorrect letter is guessed", () => {
 describe("when the number of incorrect guesses surpases max number of guesses", () => {
   it("should set the hasLost flag to true", async () => {
     const { result } = renderHook(useHangman);
+    await act(async () => {
+      result.current.startNewGame();
+    });
+
     expect(result.current.hasLost).toEqual(false);
 
     await act(async () => {

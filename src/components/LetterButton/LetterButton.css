@@ -1,0 +1,35 @@
+.letterButton {
+  background: none;
+  border: 1px solid white;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  transition: all 0.3s;
+}
+
+.letterButton:hover {
+  background: white;
+  color: black;
+}
+
+.letterButton-guessed,
+.letterButton-isGameOver,
+.letterButton-isGameOver:hover {
+  background: none;
+  border-color: black;
+  color: black;
+  cursor: not-allowed;
+}
+
+.letterButton-isCorrect,
+.letterButton-isCorrect:hover {
+  background: green;
+}
+
+.letterButton-isWrong,
+.letterButton-isWrong:hover {
+  background: red;
+}

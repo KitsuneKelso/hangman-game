@@ -3,6 +3,7 @@ import Alphabet from "../Alphabet";
 import Gallows from "../Gallows";
 import StatusMessage from "../StatusMessage";
 import Word from "../Word";
+import "./Hangman.css";
 
 const Hangman: React.FC = () => {
   const {
@@ -32,12 +33,13 @@ const Hangman: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="hangmanGame">
       <Gallows numberOfIncorrectGuesses={numberOfIncorrectGuesses} />
       <Word lettersInWord={lettersInWord} />
       <StatusMessage word={word} hasWon={hasWon} hasLost={hasLost} />
       <Alphabet
         isGameOver={hasWon || hasLost}
+        word={word}
         lettersGuessed={lettersGuessed}
         onClickLetter={guessLetter}
       />

@@ -1,8 +1,11 @@
 import { useCallback } from "react";
 import { ALPHABET_LETTERS } from "../../constants";
+import LetterButton from "../LetterButton";
+import "./Alphabet.css";
 
 interface Props {
   isGameOver: boolean;
+  word: string;
   lettersGuessed: string[];
   onClickLetter: (letter: string) => void;
 }
@@ -10,6 +13,7 @@ interface Props {
 const Alphabet: React.FC<Props> = ({
   isGameOver,
   lettersGuessed,
+  word,
   onClickLetter,
 }) => {
   const handleClick = useCallback(
@@ -19,23 +23,31 @@ const Alphabet: React.FC<Props> = ({
     [onClickLetter]
   );
 
-  const buttonIsDisabled = useCallback(
+  const letterHasBeenGuessed = useCallback(
     (letter: string) => {
-      return isGameOver || lettersGuessed.includes(letter);
+      return lettersGuessed.includes(letter);
     },
-    [isGameOver, lettersGuessed]
+    [lettersGuessed]
+  );
+
+  const letterIsInWord = useCallback(
+    (letter: string) => {
+      return word.includes(letter);
+    },
+    [word]
   );
 
   return (
-    <div>
+    <div className="alphabetButtons">
       {ALPHABET_LETTERS.map((letter) => (
-        <button
+        <LetterButton
           key={letter}
+          letter={letter.toUpperCase()}
+          letterHasBeenGuessed={letterHasBeenGuessed(letter)}
+          letterIsInWord={letterIsInWord(letter)}
+          isGameOver={isGameOver}
           onClick={() => handleClick(letter)}
-          disabled={buttonIsDisabled(letter)}
-        >
-          {letter.toUpperCase()}
-        </button>
+        />
       ))}
     </div>
   );

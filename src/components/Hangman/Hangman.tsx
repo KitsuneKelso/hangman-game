@@ -8,6 +8,7 @@ const Hangman: React.FC = () => {
   const {
     startNewGame,
     isLoading,
+    hasError,
     word,
     lettersInWord,
     lettersGuessed,
@@ -20,8 +21,14 @@ const Hangman: React.FC = () => {
   if (isLoading) {
     return <span>Loading, please wait...</span>;
   }
+
   if (word.length === 0) {
-    return <button onClick={startNewGame}>New Game</button>;
+    return (
+      <div>
+        <button onClick={startNewGame}>New Game</button>
+        {hasError && <p>Something went wrong, please try again.</p>}
+      </div>
+    );
   }
 
   return (

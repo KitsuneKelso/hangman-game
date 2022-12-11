@@ -7,6 +7,8 @@ const getWord = async () => {
 
   if (response.word) {
     return response.word;
+  } else {
+    throw new Error("Failed to fetch a word");
   }
 };
 

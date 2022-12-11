@@ -159,3 +159,20 @@ describe("when the number of incorrect guesses surpases max number of guesses", 
     expect(result.current.hasLost).toEqual(true);
   });
 });
+
+describe("when starting a new game throws an error", () => {
+  beforeEach(() => {
+    (getWord as jest.Mock).mockRejectedValue({});
+  });
+
+  it("should return true for has error", async () => {
+    const { result } = renderHook(useHangman);
+    expect(result.current.hasError).toEqual(false);
+
+    await act(async () => {
+      result.current.startNewGame();
+    });
+
+    expect(result.current.hasError).toEqual(true);
+  });
+});

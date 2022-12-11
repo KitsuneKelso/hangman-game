@@ -5,6 +5,7 @@ import { Letter } from "../types";
 
 const useHangman = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const [word, setWord] = useState("");
   const [lettersInWord, setLettersInWord] = useState<Letter[]>([]);
   const [lettersGuessed, setLettersGuessed] = useState<string[]>([]);
@@ -22,10 +23,19 @@ const useHangman = () => {
   );
 
   const startNewGame = useCallback(async () => {
-    setIsLoading(true);
-    const newWord = await getWord();
-    setWord(newWord);
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      setHasError(false);
+
+      const newWord = await getWord();
+      setWord(newWord);
+
+      setIsLoading(false);
+    } catch (e) {
+      console.error(e);
+      setHasError(true);
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -64,6 +74,7 @@ const useHangman = () => {
   return {
     startNewGame,
     isLoading,
+    hasError,
     word,
     lettersInWord,
     lettersGuessed,

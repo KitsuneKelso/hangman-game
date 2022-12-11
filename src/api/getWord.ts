@@ -1,6 +1,8 @@
+import { API_KEY } from ".";
+
 const getWord = async () => {
   const response = await fetch("https://api.api-ninjas.com/v1/randomword", {
-    headers: { "X-Api-Key": "EBBdyXUBN/350zIrCZFR0g==W5eCPC9QYvuUKJ3c" },
+    headers: { "X-Api-Key": API_KEY },
   }).then((res) => res.json());
 
   if (response.word) {

@@ -1,0 +1,21 @@
+@keyframes warning {
+  0%,
+  100% {
+    color: white;
+  }
+  50% {
+    color: rgb(209, 34, 72);
+  }
+}
+
+.status-warning {
+  animation: warning 1000ms infinite;
+}
+
+.status-win {
+  color: rgb(9, 168, 17);
+}
+
+.status-lose {
+  color: rgb(209, 34, 72);
+}

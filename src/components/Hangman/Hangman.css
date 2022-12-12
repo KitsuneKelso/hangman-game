@@ -12,3 +12,17 @@
 .restartButton {
   margin-top: 20px;
 }
+
+@keyframes loading {
+  0%,
+  100% {
+    color: rgb(235, 235, 235);
+  }
+  50% {
+    color: rgb(167, 167, 167);
+  }
+}
+
+.loadingMessage {
+  animation: loading 1000ms infinite;
+}

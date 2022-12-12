@@ -1,0 +1,115 @@
+@keyframes warning {
+  0%,
+  100% {
+    color: white;
+  }
+  50% {
+    color: rgb(209, 34, 72);
+  }
+}
+
+.counter-warning {
+  animation: warning 1000ms infinite;
+}
+
+.counter-gameOver {
+  color: rgb(209, 34, 72);
+}
+
+.gallows {
+  width: 180px;
+  height: 140px;
+  position: relative;
+}
+
+.gallowsShape {
+  position: absolute;
+  display: block;
+  background-color: white;
+}
+
+.gallowsPiece-base {
+  bottom: 0px;
+  left: 0px;
+  width: 180px;
+  height: 2px;
+}
+
+.gallowsPiece-post {
+  bottom: 0px;
+  left: 60px;
+  width: 2px;
+  height: 140px;
+}
+
+.gallowsPiece-top {
+  bottom: 140px;
+  left: 60px;
+  width: 60px;
+  height: 2px;
+}
+
+.gallowsPiece-crossBeam {
+  bottom: 132px;
+  left: 57px;
+  width: 24px;
+  height: 2px;
+  border-radius: 1px;
+  transform: rotate(-45deg);
+}
+
+.gallowsPiece-rope {
+  bottom: 120px;
+  left: 118px;
+  width: 2px;
+  height: 20px;
+}
+
+.gallowsPiece-head {
+  background: none;
+  bottom: 102px;
+  left: 110px;
+  width: 15px;
+  height: 15px;
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
+.gallowsPiece-body {
+  bottom: 78px;
+  left: 118px;
+  width: 2px;
+  height: 24px;
+}
+
+.gallowsPiece-leftArm {
+  bottom: 78px;
+  left: 114px;
+  width: 2px;
+  height: 22px;
+  transform: rotate(20deg);
+}
+
+.gallowsPiece-rightArm {
+  bottom: 78px;
+  left: 122px;
+  width: 2px;
+  height: 22px;
+  transform: rotate(-20deg);
+}
+
+.gallowsPiece-leftLeg {
+  bottom: 58px;
+  left: 114px;
+  width: 2px;
+  height: 22px;
+  transform: rotate(20deg);
+}
+
+.gallowsPiece-rightLeg {
+  bottom: 58px;
+  left: 122px;
+  width: 2px;
+  height: 22px;
+  transform: rotate(-20deg);
+}

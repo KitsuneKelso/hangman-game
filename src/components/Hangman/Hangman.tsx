@@ -23,7 +23,7 @@ const Hangman: React.FC = () => {
   const isGameOver = hasWon || hasLost;
 
   if (isLoading) {
-    return <span>Loading, please wait...</span>;
+    return <span className="loadingMessage">Loading, please wait...</span>;
   }
 
   if (word.length === 0) {
@@ -43,7 +43,12 @@ const Hangman: React.FC = () => {
     <div className="hangmanGame">
       <Gallows numberOfIncorrectGuesses={numberOfIncorrectGuesses} />
       <Word lettersInWord={lettersInWord} />
-      <StatusMessage word={word} hasWon={hasWon} hasLost={hasLost} />
+      <StatusMessage
+        word={word}
+        hasWon={hasWon}
+        hasLost={hasLost}
+        numberOfIncorrectGuesses={numberOfIncorrectGuesses}
+      />
       <Alphabet
         isGameOver={isGameOver}
         word={word}

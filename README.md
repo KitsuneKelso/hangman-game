@@ -1,4 +1,16 @@
-# Getting Started with Create React App
+# Hangman
+
+This is a simple implementation of [Hangman, the classic guessing game](<https://en.wikipedia.org/wiki/Hangman_(game)>).
+
+## Rules
+
+A word will be randomly selected, after which the player(s) will need to guess the hidden word by selecting the letters they believe the word contains.
+
+If the correct word is guessed with fewer than 8 incorrect letters, the player(s) win! However, if they fail to guess the word, they will be hanged!
+
+![Preview](./preview.png "Preview")
+
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

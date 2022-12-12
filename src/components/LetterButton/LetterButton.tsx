@@ -17,23 +17,23 @@ const LetterButton: React.FC<Props> = ({
   onClick,
 }) => {
   const className = useMemo(() => {
-    let name = "letterButton";
+    let cn = "letterButton";
 
     if (letterHasBeenGuessed) {
-      name += " letterButton-guessed";
+      cn += " letterButton-guessed";
 
       if (letterIsInWord) {
-        name += " letterButton-isCorrect";
+        cn += " letterButton-isCorrect";
       } else {
-        name += " letterButton-isWrong";
+        cn += " letterButton-isWrong";
       }
     }
 
     if (isGameOver) {
-      name += " letterButton-isGameOver";
+      cn += " letterButton-isGameOver";
     }
 
-    return name;
+    return cn;
   }, [isGameOver, letterHasBeenGuessed, letterIsInWord]);
 
   return (

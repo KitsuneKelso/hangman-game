@@ -1,5 +1,6 @@
 import { useHangman } from "../../hooks";
 import Alphabet from "../Alphabet";
+import Button from "../Button";
 import Gallows from "../Gallows";
 import StatusMessage from "../StatusMessage";
 import Word from "../Word";
@@ -19,15 +20,21 @@ const Hangman: React.FC = () => {
     guessLetter,
   } = useHangman();
 
+  const isGameOver = hasWon || hasLost;
+
   if (isLoading) {
     return <span>Loading, please wait...</span>;
   }
 
   if (word.length === 0) {
     return (
-      <div>
-        <button onClick={startNewGame}>New Game</button>
-        {hasError && <p>Something went wrong, please try again.</p>}
+      <div className="hangmanGame">
+        <Button onClick={startNewGame}>New Game</Button>
+        {hasError && (
+          <span className="errorMessage">
+            Something went wrong, please try again.
+          </span>
+        )}
       </div>
     );
   }
@@ -38,11 +45,14 @@ const Hangman: React.FC = () => {
       <Word lettersInWord={lettersInWord} />
       <StatusMessage word={word} hasWon={hasWon} hasLost={hasLost} />
       <Alphabet
-        isGameOver={hasWon || hasLost}
+        isGameOver={isGameOver}
         word={word}
         lettersGuessed={lettersGuessed}
         onClickLetter={guessLetter}
       />
+      <Button className="restartButton" onClick={startNewGame}>
+        {isGameOver ? "Play Again" : "New Game"}
+      </Button>
     </div>
   );
 };

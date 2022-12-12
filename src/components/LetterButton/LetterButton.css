@@ -26,10 +26,10 @@
 
 .letterButton-isCorrect,
 .letterButton-isCorrect:hover {
-  background: green;
+  background: rgb(9, 168, 17);
 }
 
 .letterButton-isWrong,
 .letterButton-isWrong:hover {
-  background: red;
+  background: rgb(209, 34, 72);
 }

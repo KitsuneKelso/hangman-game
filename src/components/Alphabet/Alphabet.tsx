@@ -32,7 +32,7 @@ const Alphabet: React.FC<Props> = ({
 
   const letterIsInWord = useCallback(
     (letter: string) => {
-      return word.includes(letter);
+      return word.toLocaleLowerCase().includes(letter);
     },
     [word]
   );

@@ -5,6 +5,7 @@ import useHangman from "../useHangman";
 jest.mock("../../api/getWord", () => jest.fn());
 
 const TEST_WORD = "test";
+const MIXED_CASING_WORD = "SoHo";
 
 beforeEach(() => {
   (getWord as jest.Mock).mockResolvedValue(TEST_WORD);
@@ -174,5 +175,34 @@ describe("when starting a new game throws an error", () => {
     });
 
     expect(result.current.hasError).toEqual(true);
+  });
+});
+
+describe("when a word with mixed character casing is returned", () => {
+  beforeEach(() => {
+    (getWord as jest.Mock).mockResolvedValue(MIXED_CASING_WORD);
+  });
+
+  it("should be possible to guess the word", async () => {
+    const { result } = renderHook(useHangman);
+    await act(async () => {
+      result.current.startNewGame();
+    });
+    expect(result.current.hasWon).toEqual(false);
+
+    await act(async () => {
+      result.current.guessLetter("s");
+    });
+    expect(result.current.hasWon).toEqual(false);
+
+    await act(async () => {
+      result.current.guessLetter("o");
+    });
+    expect(result.current.hasWon).toEqual(false);
+
+    await act(async () => {
+      result.current.guessLetter("h");
+    });
+    expect(result.current.hasWon).toEqual(true);
   });
 });

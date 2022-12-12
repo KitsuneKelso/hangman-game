@@ -26,13 +26,14 @@ const useHangman = () => {
     try {
       setIsLoading(true);
       setHasError(false);
+      setLettersGuessed([]);
+      setNumberOfIncorrectGuesses(0);
 
       const newWord = await getWord();
       setWord(newWord);
 
       setIsLoading(false);
     } catch (e) {
-      console.error(e);
       setHasError(true);
       setIsLoading(false);
     }
@@ -40,9 +41,6 @@ const useHangman = () => {
 
   useEffect(() => {
     if (word.length > 0) {
-      setLettersGuessed([]);
-      setNumberOfIncorrectGuesses(0);
-
       const newGuessedWord = word.split("").map((char) => ({
         character: char,
         guessedCorrectly: false,
@@ -56,11 +54,12 @@ const useHangman = () => {
     (guessedLetter: string) => {
       setLettersGuessed([...lettersGuessed, guessedLetter]);
 
-      if (word.includes(guessedLetter)) {
+      if (word.toLocaleLowerCase().includes(guessedLetter)) {
         const updatedGuessedWord = lettersInWord.map((letter) => ({
           ...letter,
           guessedCorrectly:
-            letter.character === guessedLetter || letter.guessedCorrectly,
+            letter.character.toLocaleLowerCase() === guessedLetter ||
+            letter.guessedCorrectly,
         }));
 
         setLettersInWord(updatedGuessedWord);

@@ -10,6 +10,20 @@ If the correct word is guessed with fewer than 8 incorrect letters, the player(s
 
 ![Preview](./preview.png "Preview")
 
+## Prerequisites
+
+To get started, [generate a new API Key for the API Ninjas Directory](https://api-ninjas.com/profile).
+
+Copy this key and create a new file in the root of this project named:
+
+### `.env.local`
+
+In this file, add your API Key by replacing `<YOU_API_KEY_HERE>` with your key:
+
+```js
+REACT_APP_API_KEY=<YOU_API_KEY_HERE>
+```
+
 ---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -1,6 +1,6 @@
-import { API_KEY } from ".";
-
 const getWord = async () => {
+  const API_KEY = process.env.REACT_APP_API_KEY as string;
+
   const response = await fetch("https://api.api-ninjas.com/v1/randomword", {
     headers: { "X-Api-Key": API_KEY },
   }).then((res) => res.json());

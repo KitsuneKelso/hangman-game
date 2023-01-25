@@ -10,17 +10,16 @@ const Hangman: React.FC = () => {
   const {
     startNewGame,
     isLoading,
-    hasError,
+    isError,
     word,
     lettersInWord,
     lettersGuessed,
     numberOfIncorrectGuesses,
     hasLost,
     hasWon,
+    isGameOver,
     guessLetter,
   } = useHangman();
-
-  const isGameOver = hasWon || hasLost;
 
   if (isLoading) {
     return <span className="loadingMessage">Loading, please wait...</span>;
@@ -30,7 +29,7 @@ const Hangman: React.FC = () => {
     return (
       <div className="hangmanGame">
         <Button onClick={startNewGame}>New Game</Button>
-        {hasError && (
+        {isError && (
           <span className="errorMessage">
             Something went wrong, please try again.
           </span>

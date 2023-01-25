@@ -16,6 +16,33 @@ beforeEach(() => {
   });
 });
 
+it("should add and remove event listener for keypress", () => {
+  jest.spyOn(window, "addEventListener").mockImplementation(jest.fn);
+  jest.spyOn(window, "removeEventListener").mockImplementation(jest.fn);
+
+  expect(window.addEventListener).not.toHaveBeenCalled();
+  expect(window.removeEventListener).not.toHaveBeenCalled();
+
+  const { unmount } = renderHook(useHangman);
+
+  expect(window.addEventListener).toHaveBeenCalledTimes(2);
+  expect(window.addEventListener).toHaveBeenNthCalledWith(
+    1,
+    "keypress",
+    expect.any(Function)
+  );
+  expect(window.removeEventListener).toHaveBeenCalledTimes(1);
+
+  unmount();
+
+  expect(window.removeEventListener).toHaveBeenCalledTimes(2);
+  expect(window.removeEventListener).toHaveBeenNthCalledWith(
+    2,
+    "keypress",
+    expect.any(Function)
+  );
+});
+
 describe("when a new game is started", () => {
   it("should call useQuery and initialize a word for guessing", async () => {
     expect(useQuery).not.toHaveBeenCalled();
@@ -174,13 +201,13 @@ describe("when starting a new game returns an error", () => {
 
   it("should return true for has error", async () => {
     const { result } = renderHook(useHangman);
-    expect(result.current.hasError).toEqual(false);
+    expect(result.current.isError).toEqual(false);
 
     await act(async () => {
       result.current.startNewGame();
     });
 
-    expect(result.current.hasError).toEqual(true);
+    expect(result.current.isError).toEqual(true);
   });
 });
 

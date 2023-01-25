@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getWord } from "../api";
-import { MAX_NUMBER_OF_GUESSES } from "../constants";
+import { ALPHABET_LETTERS, MAX_NUMBER_OF_GUESSES } from "../constants";
 import { Letter } from "../types";
 
 const useHangman = () => {
@@ -9,6 +9,9 @@ const useHangman = () => {
     queryKey: ["word"],
     queryFn: getWord,
   });
+
+  const isLoading = result.isLoading || result.fetchStatus === "fetching";
+  const isError = result.isError;
 
   const [lettersInWord, setLettersInWord] = useState<Letter[]>([]);
   const [lettersGuessed, setLettersGuessed] = useState<string[]>([]);
@@ -24,6 +27,7 @@ const useHangman = () => {
       lettersInWord.every((letter) => letter.guessedCorrectly),
     [lettersInWord]
   );
+  const isGameOver = hasWon || hasLost;
 
   const startNewGame = useCallback(() => {
     result.refetch();
@@ -67,16 +71,37 @@ const useHangman = () => {
     [lettersGuessed, lettersInWord, result.data]
   );
 
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (isLoading || isGameOver) return;
+
+      const key = event.key.toLowerCase();
+      if (lettersGuessed.includes(key)) {
+        return;
+      }
+      if (ALPHABET_LETTERS.includes(key)) {
+        guessLetter(key);
+      }
+    };
+
+    window.addEventListener("keypress", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keypress", handleKeyPress);
+    };
+  }, [guessLetter, isGameOver, isLoading, lettersGuessed]);
+
   return {
     startNewGame,
-    isLoading: result.isLoading || result.fetchStatus === "fetching",
-    hasError: result.isError,
+    isLoading,
+    isError,
     word: result?.data?.word,
     lettersInWord,
     lettersGuessed,
     numberOfIncorrectGuesses,
     hasLost,
     hasWon,
+    isGameOver,
     guessLetter,
   };
 };

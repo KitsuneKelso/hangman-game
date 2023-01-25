@@ -1,30 +1,29 @@
+import { useQuery } from "@tanstack/react-query";
 import { act, renderHook } from "@testing-library/react";
-import { getWord } from "../../api";
 import useHangman from "../useHangman";
 
-jest.mock("../../api/getWord", () => jest.fn());
+jest.mock("@tanstack/react-query", () => ({
+  useQuery: jest.fn(),
+}));
 
 const TEST_WORD = "test";
 const MIXED_CASING_WORD = "SoHo";
 
 beforeEach(() => {
-  (getWord as jest.Mock).mockResolvedValue(TEST_WORD);
+  (useQuery as jest.Mock).mockReturnValue({
+    data: { word: TEST_WORD },
+    refetch: jest.fn(),
+  });
 });
 
 describe("when a new game is started", () => {
-  it("should call getWord and initialize a word for guessing", async () => {
-    expect(getWord).not.toHaveBeenCalled();
+  it("should call useQuery and initialize a word for guessing", async () => {
+    expect(useQuery).not.toHaveBeenCalled();
 
     const { result } = renderHook(useHangman);
 
-    await act(async () => {
-      result.current.startNewGame();
-    });
-
-    expect(getWord).toHaveBeenCalledTimes(1);
-
+    expect(useQuery).toHaveBeenCalled();
     expect(result.current.word).toEqual(TEST_WORD);
-
     expect(result.current.lettersInWord).toEqual([
       { character: "t", guessedCorrectly: false },
       { character: "e", guessedCorrectly: false },
@@ -161,9 +160,16 @@ describe("when the number of incorrect guesses surpases max number of guesses", 
   });
 });
 
-describe("when starting a new game throws an error", () => {
+describe("when starting a new game returns an error", () => {
   beforeEach(() => {
-    (getWord as jest.Mock).mockRejectedValue({});
+    (useQuery as jest.Mock)
+      .mockReturnValueOnce({
+        isError: false,
+        refetch: jest.fn(),
+      })
+      .mockReturnValueOnce({
+        isError: true,
+      });
   });
 
   it("should return true for has error", async () => {
@@ -180,7 +186,12 @@ describe("when starting a new game throws an error", () => {
 
 describe("when a word with mixed character casing is returned", () => {
   beforeEach(() => {
-    (getWord as jest.Mock).mockResolvedValue(MIXED_CASING_WORD);
+    (useQuery as jest.Mock).mockReturnValue({
+      data: {
+        word: MIXED_CASING_WORD,
+      },
+      refetch: jest.fn(),
+    });
   });
 
   it("should be possible to guess the word", async () => {

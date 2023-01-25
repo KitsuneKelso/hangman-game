@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { act, renderHook } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import useHangman from "../useHangman";
 
 jest.mock("@tanstack/react-query", () => ({
@@ -14,6 +15,10 @@ beforeEach(() => {
     data: { word: TEST_WORD },
     refetch: jest.fn(),
   });
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
 });
 
 it("should add and remove event listener for keypress", () => {
@@ -241,6 +246,23 @@ describe("when a word with mixed character casing is returned", () => {
     await act(async () => {
       result.current.guessLetter("h");
     });
+    expect(result.current.hasWon).toEqual(true);
+  });
+});
+
+describe("when using keyboard to guess letters", () => {
+  it("should be possible to guess the word", async () => {
+    const { result } = renderHook(useHangman);
+    await act(async () => {
+      result.current.startNewGame();
+    });
+
+    expect(result.current.hasWon).toEqual(false);
+    userEvent.keyboard("t");
+    expect(result.current.hasWon).toEqual(false);
+    userEvent.keyboard("e");
+    expect(result.current.hasWon).toEqual(false);
+    userEvent.keyboard("s");
     expect(result.current.hasWon).toEqual(true);
   });
 });
